@@ -1,25 +1,22 @@
-name: Build AccessiTools IPA
+name: Build AccessiTools v2 IPA
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:   # Permet de lancer manuellement
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: macos-14   # Mac virtuel avec Xcode gratuit
+    runs-on: macos-14
 
     steps:
-    # 1. Télécharge le code de ton repo
-    - name: Checkout code
+    - name: Checkout
       uses: actions/checkout@v4
 
-    # 2. Sélectionne Xcode 15
-    - name: Select Xcode
+    - name: Select Xcode 15
       run: sudo xcode-select -s /Applications/Xcode_15.4.app
 
-    # 3. Compile l'app (sans signature — pour TrollStore)
-    - name: Build app
+    - name: Build (sans signature Apple)
       run: |
         xcodebuild \
           -project AccessiTools.xcodeproj \
@@ -34,26 +31,52 @@ jobs:
           build \
           SYMROOT=$PWD/build
 
-    # 4. Crée le fichier .ipa manuellement
-    - name: Package IPA
+    - name: Installer ldid (signeur TrollStore)
       run: |
-        APP_PATH=$(find build -name "*.app" | head -1)
-        echo "App trouvée: $APP_PATH"
-        
-        mkdir -p Payload
-        cp -r "$APP_PATH" Payload/
-        
-        # Signe avec ldid (pour TrollStore, pas besoin de certificat Apple)
-        brew install ldid 2>/dev/null || true
-        ldid -S Payload/*.app/$(ls Payload/*.app/ | head -1) 2>/dev/null || true
-        
-        zip -r AccessiTools.ipa Payload/
-        echo "✅ IPA créé: $(du -sh AccessiTools.ipa)"
+        brew install ldid
+        echo "ldid version: $(ldid 2>&1 | head -1)"
 
-    # 5. Upload l'IPA comme artefact téléchargeable
+    - name: Signer avec entitlements TrollStore
+      run: |
+        APP=$(find build -name "*.app" | head -1)
+        BIN="$APP/AccessiTools"
+        echo "Binary: $BIN"
+
+        # Signe avec les entitlements TrollStore
+        ldid -SAccessiTools/entitlements.plist "$BIN"
+        echo "✅ Entitlements appliqués"
+
+    - name: Créer le IPA
+      run: |
+        APP=$(find build -name "*.app" | head -1)
+        echo "App: $APP"
+
+        mkdir -p Payload
+        cp -r "$APP" Payload/AccessiTools.app
+
+        # Crée le IPA (c'est juste un zip renommé)
+        zip -r AccessiTools.ipa Payload/
+        echo "✅ IPA: $(du -sh AccessiTools.ipa)"
+
+        # Vérifie le contenu
+        echo "Contenu:"
+        ls -la Payload/AccessiTools.app/
+
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
-        name: AccessiTools-IPA
+        name: AccessiTools-v2-IPA
         path: AccessiTools.ipa
-        retention-days: 30   # Disponible 30 jours
+        retention-days: 30
+
+    - name: Résumé
+      run: |
+        echo "═══════════════════════════════════"
+        echo "  ✅ AccessiTools v2 compilé !"
+        echo "  📱 Installe via TrollStore"
+        echo "═══════════════════════════════════"
+        echo ""
+        echo "Fonctionnalités v2 :"
+        echo "  🔄 Rotation GLOBALE (SpringBoard)"
+        echo "  ⌨️  Clavier flottant DRAGGABLE"
+        echo "  💾 Clavier reste en arrière-plan"
