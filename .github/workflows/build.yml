@@ -10,75 +10,36 @@ jobs:
     runs-on: macos-14
 
     steps:
-    - name: Checkout
+    - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Verifier les fichiers
-      run: |
-        echo "=== Fichiers presents ==="
-        find . -not -path './.git/*' | sort
-        echo ""
-        FILES=(
-          "AccessiTools.xcodeproj/project.pbxproj"
-          "AccessiTools/AppDelegate.swift"
-          "AccessiTools/MainViewController.swift"
-          "AccessiTools/FloatingKeyboardWindow.swift"
-          "AccessiTools/Info.plist"
-          "AccessiTools/entitlements.plist"
-        )
-        ALL_OK=true
-        for f in "${FILES[@]}"; do
-          if [ -f "$f" ]; then echo "OK $f"
-          else echo "MANQUANT $f"; ALL_OK=false; fi
-        done
-        if [ "$ALL_OK" = false ]; then exit 1; fi
+    - name: Select Xcode 15.4
+      run: sudo xcode-select -s /Applications/Xcode_15.4.app
 
-    - name: Choisir Xcode
-      run: |
-        if [ -d "/Applications/Xcode_15.4.app" ]; then
-          sudo xcode-select -s /Applications/Xcode_15.4.app
-        fi
-        echo "Xcode: $(xcodebuild -version)"
-
-    - name: Compiler
+    - name: Build app
       run: |
         xcodebuild \
           -project AccessiTools.xcodeproj \
-          -scheme AccessiTools \
+          -target AccessiTools \
           -configuration Release \
-          -sdk iphoneos \
+          -sdk iphoneos17.5 \
           -destination "generic/platform=iOS" \
           CODE_SIGNING_ALLOWED=NO \
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGN_IDENTITY="" \
           DEAD_CODE_STRIPPING=NO \
-          ONLY_ACTIVE_ARCH=NO \
-          build \
-          SYMROOT="$PWD/build" \
-          2>&1 | tee build_log.txt
-        if [ ${PIPESTATUS[0]} -ne 0 ]; then
-          echo "=== ERREURS ==="
-          grep "error:" build_log.txt | head -30
-          exit 1
-        fi
+          SYMROOT=$PWD/build
 
-    - name: Installer ldid
-      run: brew install ldid
-
-    - name: Signer avec entitlements
+    - name: Package IPA
       run: |
-        APP=$(find build -name "*.app" | grep -v BuildProductsPath | head -1)
-        echo "App: $APP"
+        APP=$(find build -name "*.app" -not -path "*/Intermediates*" | head -1)
+        echo "App trouvée : $APP"
+        brew install ldid
         ldid -SAccessiTools/entitlements.plist "$APP/AccessiTools"
-        echo "Signe OK"
-
-    - name: Creer IPA
-      run: |
-        APP=$(find build -name "*.app" | grep -v BuildProductsPath | head -1)
         mkdir -p Payload
         cp -r "$APP" Payload/AccessiTools.app
         zip -r AccessiTools.ipa Payload/
-        echo "IPA: $(du -sh AccessiTools.ipa)"
+        echo "✅ IPA créé : $(du -sh AccessiTools.ipa)"
 
     - name: Upload IPA
       uses: actions/upload-artifact@v4
@@ -86,11 +47,3 @@ jobs:
         name: AccessiTools-v2-IPA
         path: AccessiTools.ipa
         retention-days: 30
-
-    - name: Upload log si erreur
-      if: failure()
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-log-erreur
-        path: build_log.txt
-        retention-days: 7
