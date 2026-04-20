@@ -13,10 +13,34 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Select Xcode 15
-      run: sudo xcode-select -s /Applications/Xcode_15.4.app
+    - name: Verifier les fichiers
+      run: |
+        echo "=== Fichiers presents ==="
+        find . -not -path './.git/*' | sort
+        echo ""
+        FILES=(
+          "AccessiTools.xcodeproj/project.pbxproj"
+          "AccessiTools/AppDelegate.swift"
+          "AccessiTools/MainViewController.swift"
+          "AccessiTools/FloatingKeyboardWindow.swift"
+          "AccessiTools/Info.plist"
+          "AccessiTools/entitlements.plist"
+        )
+        ALL_OK=true
+        for f in "${FILES[@]}"; do
+          if [ -f "$f" ]; then echo "OK $f"
+          else echo "MANQUANT $f"; ALL_OK=false; fi
+        done
+        if [ "$ALL_OK" = false ]; then exit 1; fi
 
-    - name: Build (sans signature Apple)
+    - name: Choisir Xcode
+      run: |
+        if [ -d "/Applications/Xcode_15.4.app" ]; then
+          sudo xcode-select -s /Applications/Xcode_15.4.app
+        fi
+        echo "Xcode: $(xcodebuild -version)"
+
+    - name: Compiler
       run: |
         xcodebuild \
           -project AccessiTools.xcodeproj \
@@ -28,39 +52,33 @@ jobs:
           CODE_SIGNING_REQUIRED=NO \
           CODE_SIGN_IDENTITY="" \
           DEAD_CODE_STRIPPING=NO \
+          ONLY_ACTIVE_ARCH=NO \
           build \
-          SYMROOT=$PWD/build
+          SYMROOT="$PWD/build" \
+          2>&1 | tee build_log.txt
+        if [ ${PIPESTATUS[0]} -ne 0 ]; then
+          echo "=== ERREURS ==="
+          grep "error:" build_log.txt | head -30
+          exit 1
+        fi
 
-    - name: Installer ldid (signeur TrollStore)
+    - name: Installer ldid
+      run: brew install ldid
+
+    - name: Signer avec entitlements
       run: |
-        brew install ldid
-        echo "ldid version: $(ldid 2>&1 | head -1)"
-
-    - name: Signer avec entitlements TrollStore
-      run: |
-        APP=$(find build -name "*.app" | head -1)
-        BIN="$APP/AccessiTools"
-        echo "Binary: $BIN"
-
-        # Signe avec les entitlements TrollStore
-        ldid -SAccessiTools/entitlements.plist "$BIN"
-        echo "✅ Entitlements appliqués"
-
-    - name: Créer le IPA
-      run: |
-        APP=$(find build -name "*.app" | head -1)
+        APP=$(find build -name "*.app" | grep -v BuildProductsPath | head -1)
         echo "App: $APP"
+        ldid -SAccessiTools/entitlements.plist "$APP/AccessiTools"
+        echo "Signe OK"
 
+    - name: Creer IPA
+      run: |
+        APP=$(find build -name "*.app" | grep -v BuildProductsPath | head -1)
         mkdir -p Payload
         cp -r "$APP" Payload/AccessiTools.app
-
-        # Crée le IPA (c'est juste un zip renommé)
         zip -r AccessiTools.ipa Payload/
-        echo "✅ IPA: $(du -sh AccessiTools.ipa)"
-
-        # Vérifie le contenu
-        echo "Contenu:"
-        ls -la Payload/AccessiTools.app/
+        echo "IPA: $(du -sh AccessiTools.ipa)"
 
     - name: Upload IPA
       uses: actions/upload-artifact@v4
@@ -69,14 +87,10 @@ jobs:
         path: AccessiTools.ipa
         retention-days: 30
 
-    - name: Résumé
-      run: |
-        echo "═══════════════════════════════════"
-        echo "  ✅ AccessiTools v2 compilé !"
-        echo "  📱 Installe via TrollStore"
-        echo "═══════════════════════════════════"
-        echo ""
-        echo "Fonctionnalités v2 :"
-        echo "  🔄 Rotation GLOBALE (SpringBoard)"
-        echo "  ⌨️  Clavier flottant DRAGGABLE"
-        echo "  💾 Clavier reste en arrière-plan"
+    - name: Upload log si erreur
+      if: failure()
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-log-erreur
+        path: build_log.txt
+        retention-days: 7
