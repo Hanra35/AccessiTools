@@ -13,7 +13,7 @@ class MainViewController: UIViewController {
 
     // MARK: - Interface
     private func setupUI() {
-        view.backgroundColor = UIColor(red:0.06, green:0.06, blue:0.12, alpha:1)
+        view.backgroundColor = UIColor(red: 0.06, green: 0.06, blue: 0.12, alpha: 1)
 
         let scroll = UIScrollView()
         scroll.translatesAutoresizingMaskIntoConstraints = false
@@ -41,7 +41,7 @@ class MainViewController: UIViewController {
         // ── Titre ──
         stack.addArrangedSubview(label("♿  AccessiTools", 26, .bold, .white))
         stack.addArrangedSubview(label("Clavier flottant  ·  Rotation globale", 13, .regular,
-                                       rgba(1,1,1,0.4)))
+                                       rgba(1, 1, 1, 0.4)))
         stack.setCustomSpacing(26, after: stack.arrangedSubviews.last!)
 
         // ══ SECTION CLAVIER ══
@@ -57,7 +57,7 @@ class MainViewController: UIViewController {
         stack.addArrangedSubview(kbToggleBtn)
 
         let kbHint = label("➤ Glisse la barre en haut du clavier pour le déplacer\n➤ Le clavier reste visible même si tu quittes l'app",
-                            12, .regular, rgba(1,1,1,0.35))
+                            12, .regular, rgba(1, 1, 1, 0.35))
         kbHint.numberOfLines = 0
         stack.addArrangedSubview(kbHint)
         stack.setCustomSpacing(26, after: kbHint)
@@ -66,7 +66,7 @@ class MainViewController: UIViewController {
         stack.addArrangedSubview(sectionTitle("🔄  ROTATION GLOBALE (toutes les apps)"))
 
         let rotInfo = label("La rotation s'applique à TOUT le système :\nécran d'accueil, apps, partout.",
-                             12, .regular, rgba(0.4,0.9,0.6,0.9))
+                             12, .regular, rgba(0.4, 0.9, 0.6, 0.9))
         rotInfo.numberOfLines = 0
         stack.addArrangedSubview(rotInfo)
         stack.setCustomSpacing(10, after: rotInfo)
@@ -85,14 +85,14 @@ class MainViewController: UIViewController {
 
         // Bouton auto
         let autoBtn = actionButton("🔄   Rétablir la rotation automatique",
-                                    bg: rgba(1,1,1,0.07), fg: rgba(1,1,1,0.6))
+                                    bg: rgba(1, 1, 1, 0.07), fg: rgba(1, 1, 1, 0.6))
         autoBtn.addTarget(self, action: #selector(resetRotation), for: .touchUpInside)
         stack.addArrangedSubview(autoBtn)
         stack.setCustomSpacing(26, after: autoBtn)
 
         // ══ NOTE ══
         let note = label("⚠️  La rotation système nécessite les entitlements TrollStore (déjà inclus dans l'IPA).",
-                          11, .regular, rgba(1,0.8,0.2,0.7))
+                          11, .regular, rgba(1, 0.8, 0.2, 0.7))
         note.numberOfLines = 0
         stack.addArrangedSubview(note)
     }
@@ -103,7 +103,7 @@ class MainViewController: UIViewController {
 
         if isKeyboardShown {
             kbToggleBtn.setTitle("✕   Masquer le clavier", for: .normal)
-            kbToggleBtn.backgroundColor = UIColor(red:0.9, green:0.3, blue:0.3, alpha:1)
+            kbToggleBtn.backgroundColor = UIColor(red: 0.9, green: 0.3, blue: 0.3, alpha: 1)
 
             if AppDelegate.floatingKeyboardWindow == nil {
                 let scr = UIScreen.main.bounds
@@ -142,57 +142,78 @@ class MainViewController: UIViewController {
     }
 
     private func applySystemRotation(_ ori: SystemOrientation) {
-        // ── Méthode 1 : API privée SpringBoard (TrollStore) ──
-        // Cette fonction affecte TOUT le système (écran accueil, toutes les apps)
+        // ── Méthode principale : API privée SpringBoard (TrollStore) ──
+        // Affecte TOUT le système (écran accueil, toutes les apps)
         SBSSetSystemForcedOrientationLock(ori.rawValue)
 
-        // ── Méthode 2 : fallback UIDevice (affecte seulement cette app) ──
-        let deviceOri: UIDeviceOrientation
-        switch ori {
-        case .auto:            deviceOri = .unknown
-        case .portrait:        deviceOri = .portrait
-        case .portraitFlipped: deviceOri = .portraitUpsideDown
-        case .landscapeLeft:   deviceOri = .landscapeRight
-        case .landscapeRight:  deviceOri = .landscapeLeft
+        // ── Fallback : forcer la mise à jour de l'orientation dans cette app ──
+        // Remplace l'API dépréciée supprimée en iOS 17
+        if let windowScene = view.window?.windowScene {
+            if #available(iOS 16.0, *) {
+                let orientation: UIInterfaceOrientationMask
+                switch ori {
+                case .auto:            orientation = .all
+                case .portrait:        orientation = .portrait
+                case .portraitFlipped: orientation = .portraitUpsideDown
+                case .landscapeLeft:   orientation = .landscapeLeft
+                case .landscapeRight:  orientation = .landscapeRight
+                }
+                let geometryPrefs = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
+                windowScene.requestGeometryUpdate(geometryPrefs)
+            } else {
+                // iOS 14–15 : ancienne méthode KVC
+                let deviceOri: UIDeviceOrientation
+                switch ori {
+                case .auto:            deviceOri = .unknown
+                case .portrait:        deviceOri = .portrait
+                case .portraitFlipped: deviceOri = .portraitUpsideDown
+                case .landscapeLeft:   deviceOri = .landscapeRight
+                case .landscapeRight:  deviceOri = .landscapeLeft
+                }
+                UIDevice.current.setValue(deviceOri.rawValue, forKey: "orientation")
+            }
         }
-        UIDevice.current.setValue(deviceOri.rawValue, forKey: "orientation")
-        UINavigationController.attemptRotationToDeviceOrientation()
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask { .all }
     override var shouldAutorotate: Bool { true }
 
     // MARK: - UI helpers
-    private let purple = UIColor(red:0.42, green:0.27, blue:0.98, alpha:1)
+    private let purple = UIColor(red: 0.42, green: 0.27, blue: 0.98, alpha: 1)
 
-    private func rgba(_ r: CGFloat,_ g: CGFloat,_ b: CGFloat,_ a: CGFloat) -> UIColor {
-        UIColor(red:r, green:g, blue:b, alpha:a)
+    private func rgba(_ r: CGFloat, _ g: CGFloat, _ b: CGFloat, _ a: CGFloat) -> UIColor {
+        UIColor(red: r, green: g, blue: b, alpha: a)
     }
 
-    private func label(_ t: String,_ sz: CGFloat,_ w: UIFont.Weight,_ c: UIColor) -> UILabel {
-        let l = UILabel(); l.text = t
+    private func label(_ t: String, _ sz: CGFloat, _ w: UIFont.Weight, _ c: UIColor) -> UILabel {
+        let l = UILabel()
+        l.text = t
         l.font = .systemFont(ofSize: sz, weight: w)
-        l.textColor = c; l.textAlignment = .center; return l
+        l.textColor = c
+        l.textAlignment = .center
+        return l
     }
 
     private func sectionTitle(_ t: String) -> UILabel {
-        let l = UILabel(); l.text = t
+        let l = UILabel()
+        l.text = t
         l.font = .systemFont(ofSize: 10, weight: .semibold)
-        l.textColor = UIColor(white:1, alpha:0.35)
-        l.textAlignment = .left; return l
+        l.textColor = UIColor(white: 1, alpha: 0.35)
+        l.textAlignment = .left
+        return l
     }
 
-    private func rotButton(_ emoji: String,_ txt: String,_ ori: SystemOrientation) -> UIButton {
+    private func rotButton(_ emoji: String, _ txt: String, _ ori: SystemOrientation) -> UIButton {
         let b = UIButton(type: .system)
         b.setTitle("\(emoji)\n\(txt)", for: .normal)
         b.titleLabel?.numberOfLines = 0
         b.titleLabel?.textAlignment  = .center
         b.titleLabel?.font = .systemFont(ofSize: 12, weight: .medium)
-        b.backgroundColor  = UIColor(white:1, alpha:0.08)
+        b.backgroundColor  = UIColor(white: 1, alpha: 0.08)
         b.setTitleColor(.white, for: .normal)
         b.layer.cornerRadius = 12
         b.layer.borderWidth  = 1
-        b.layer.borderColor  = UIColor(white:1, alpha:0.12).cgColor
+        b.layer.borderColor  = UIColor(white: 1, alpha: 0.12).cgColor
         b.heightAnchor.constraint(equalToConstant: 74).isActive = true
         b.tag = Int(ori.rawValue)
         b.addTarget(self, action: #selector(handleRotation(_:)), for: .touchUpInside)
@@ -212,6 +233,9 @@ class MainViewController: UIViewController {
 
     private func hStack(_ views: [UIView]) -> UIStackView {
         let s = UIStackView(arrangedSubviews: views)
-        s.axis = .horizontal; s.spacing = 10; s.distribution = .fillEqually; return s
+        s.axis = .horizontal
+        s.spacing = 10
+        s.distribution = .fillEqually
+        return s
     }
 }
