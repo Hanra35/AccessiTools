@@ -1,0 +1,59 @@
+name: Build AccessiTools IPA
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:   # Permet de lancer manuellement
+
+jobs:
+  build:
+    runs-on: macos-14   # Mac virtuel avec Xcode gratuit
+
+    steps:
+    # 1. Télécharge le code de ton repo
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. Sélectionne Xcode 15
+    - name: Select Xcode
+      run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+    # 3. Compile l'app (sans signature — pour TrollStore)
+    - name: Build app
+      run: |
+        xcodebuild \
+          -project AccessiTools.xcodeproj \
+          -scheme AccessiTools \
+          -configuration Release \
+          -sdk iphoneos \
+          -destination "generic/platform=iOS" \
+          CODE_SIGNING_ALLOWED=NO \
+          CODE_SIGNING_REQUIRED=NO \
+          CODE_SIGN_IDENTITY="" \
+          DEAD_CODE_STRIPPING=NO \
+          build \
+          SYMROOT=$PWD/build
+
+    # 4. Crée le fichier .ipa manuellement
+    - name: Package IPA
+      run: |
+        APP_PATH=$(find build -name "*.app" | head -1)
+        echo "App trouvée: $APP_PATH"
+        
+        mkdir -p Payload
+        cp -r "$APP_PATH" Payload/
+        
+        # Signe avec ldid (pour TrollStore, pas besoin de certificat Apple)
+        brew install ldid 2>/dev/null || true
+        ldid -S Payload/*.app/$(ls Payload/*.app/ | head -1) 2>/dev/null || true
+        
+        zip -r AccessiTools.ipa Payload/
+        echo "✅ IPA créé: $(du -sh AccessiTools.ipa)"
+
+    # 5. Upload l'IPA comme artefact téléchargeable
+    - name: Upload IPA
+      uses: actions/upload-artifact@v4
+      with:
+        name: AccessiTools-IPA
+        path: AccessiTools.ipa
+        retention-days: 30   # Disponible 30 jours
