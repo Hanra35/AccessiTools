@@ -1,135 +1,243 @@
 // !$*UTF8*$!
 {
 	archiveVersion = 1;
-	classes = { };
+	classes = {
+	};
 	objectVersion = 56;
 	objects = {
 
-/* PBXBuildFile */
-		B101 /* AppDelegate.swift */             = {isa=PBXBuildFile; fileRef=B001;};
-		B102 /* MainViewController.swift */      = {isa=PBXBuildFile; fileRef=B002;};
-		B103 /* FloatingKeyboardWindow.swift */  = {isa=PBXBuildFile; fileRef=B003;};
+/* Begin PBXBuildFile section */
+		AA11BB22CC33DD44EE55FF01 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF11 /* AppDelegate.swift */; };
+		AA11BB22CC33DD44EE55FF02 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF12 /* MainViewController.swift */; };
+		AA11BB22CC33DD44EE55FF03 /* FloatingKeyboardWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF13 /* FloatingKeyboardWindow.swift */; };
+/* End PBXBuildFile section */
 
-/* PBXFileReference */
-		B000 /* AccessiTools.app */             = {isa=PBXFileReference; explicitFileType=wrapper.application; includeInIndex=0; path=AccessiTools.app; sourceTree=BUILT_PRODUCTS_DIR;};
-		B001 /* AppDelegate.swift */            = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=AppDelegate.swift; sourceTree="<group>";};
-		B002 /* MainViewController.swift */     = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=MainViewController.swift; sourceTree="<group>";};
-		B003 /* FloatingKeyboardWindow.swift */ = {isa=PBXFileReference; lastKnownFileType=sourcecode.swift; path=FloatingKeyboardWindow.swift; sourceTree="<group>";};
-		B004 /* Info.plist */                   = {isa=PBXFileReference; lastKnownFileType=text.plist.xml; path=Info.plist; sourceTree="<group>";};
-		B005 /* entitlements.plist */           = {isa=PBXFileReference; lastKnownFileType=text.plist.xml; path=entitlements.plist; sourceTree="<group>";};
+/* Begin PBXFileReference section */
+		AA11BB22CC33DD44EE55FF00 /* AccessiTools.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AccessiTools.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA11BB22CC33DD44EE55FF11 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF12 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF13 /* FloatingKeyboardWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingKeyboardWindow.swift; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF14 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF15 /* entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = entitlements.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
 
-/* PBXFrameworksBuildPhase */
-		B010 = {isa=PBXFrameworksBuildPhase; buildActionMask=2147483647; files=(); runOnlyForDeploymentPostprocessing=0;};
-
-/* PBXGroup */
-		B020 = {isa=PBXGroup; children=(B021,B022); sourceTree="<group>";};
-		B021 /* AccessiTools */ = {
-			isa=PBXGroup;
-			children=(B001,B002,B003,B004,B005);
-			path=AccessiTools;
-			sourceTree="<group>";
+/* Begin PBXFrameworksBuildPhase section */
+		AA11BB22CC33DD44EE55FF30 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-		B022 /* Products */ = {isa=PBXGroup; children=(B000); name=Products; sourceTree="<group>";};
+/* End PBXFrameworksBuildPhase section */
 
-/* PBXNativeTarget */
-		B030 /* AccessiTools */ = {
-			isa=PBXNativeTarget;
-			buildConfigurationList=B050;
-			buildPhases=(B040,B010,B041);
-			buildRules=();
-			dependencies=();
-			name=AccessiTools;
-			productName=AccessiTools;
-			productReference=B000;
-			productType="com.apple.product-type.application";
+/* Begin PBXGroup section */
+		AA11BB22CC33DD44EE55FF20 = {
+			isa = PBXGroup;
+			children = (
+				AA11BB22CC33DD44EE55FF21 /* AccessiTools */,
+				AA11BB22CC33DD44EE55FF22 /* Products */,
+			);
+			sourceTree = "<group>";
 		};
-
-/* PBXProject */
-		B060 = {
-			isa=PBXProject;
-			attributes={LastSwiftUpdateCheck=1500; LastUpgradeCheck=1500;};
-			buildConfigurationList=B061;
-			compatibilityVersion="Xcode 14.0";
-			developmentRegion=fr;
-			hasScannedForEncodings=0;
-			knownRegions=(en,Base,fr);
-			mainGroup=B020;
-			productRefGroup=B022;
-			projectDirPath="";
-			projectRoot="";
-			targets=(B030);
+		AA11BB22CC33DD44EE55FF21 /* AccessiTools */ = {
+			isa = PBXGroup;
+			children = (
+				AA11BB22CC33DD44EE55FF11 /* AppDelegate.swift */,
+				AA11BB22CC33DD44EE55FF12 /* MainViewController.swift */,
+				AA11BB22CC33DD44EE55FF13 /* FloatingKeyboardWindow.swift */,
+				AA11BB22CC33DD44EE55FF14 /* Info.plist */,
+				AA11BB22CC33DD44EE55FF15 /* entitlements.plist */,
+			);
+			path = AccessiTools;
+			sourceTree = "<group>";
 		};
+		AA11BB22CC33DD44EE55FF22 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AA11BB22CC33DD44EE55FF00 /* AccessiTools.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
 
-/* PBXSourcesBuildPhase */
-		B040 = {isa=PBXSourcesBuildPhase; buildActionMask=2147483647; files=(B101,B102,B103); runOnlyForDeploymentPostprocessing=0;};
+/* Begin PBXNativeTarget section */
+		AA11BB22CC33DD44EE55FF40 /* AccessiTools */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AA11BB22CC33DD44EE55FF60;
+			buildPhases = (
+				AA11BB22CC33DD44EE55FF31 /* Sources */,
+				AA11BB22CC33DD44EE55FF30 /* Frameworks */,
+				AA11BB22CC33DD44EE55FF32 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AccessiTools;
+			productName = AccessiTools;
+			productReference = AA11BB22CC33DD44EE55FF00 /* AccessiTools.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
 
-/* PBXResourcesBuildPhase */
-		B041 = {isa=PBXResourcesBuildPhase; buildActionMask=2147483647; files=(); runOnlyForDeploymentPostprocessing=0;};
-
-/* XCBuildConfiguration */
-		B051 /* Debug */ = {
-			isa=XCBuildConfiguration;
-			buildSettings={
-				CODE_SIGN_IDENTITY=""; CODE_SIGNING_ALLOWED=NO; CODE_SIGNING_REQUIRED=NO;
-				DEAD_CODE_STRIPPING=NO;
-				IPHONEOS_DEPLOYMENT_TARGET=14.0;
-				SDKROOT=iphoneos;
-				SWIFT_OPTIMIZATION_LEVEL="-Onone";
+/* Begin PBXProject section */
+		AA11BB22CC33DD44EE55FF70 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 			};
-			name=Debug;
+			buildConfigurationList = AA11BB22CC33DD44EE55FF71;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = fr;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				fr,
+			);
+			mainGroup = AA11BB22CC33DD44EE55FF20;
+			productRefGroup = AA11BB22CC33DD44EE55FF22 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				AA11BB22CC33DD44EE55FF40 /* AccessiTools */,
+			);
 		};
-		B052 /* Release */ = {
-			isa=XCBuildConfiguration;
-			buildSettings={
-				CODE_SIGN_IDENTITY=""; CODE_SIGNING_ALLOWED=NO; CODE_SIGNING_REQUIRED=NO;
-				DEAD_CODE_STRIPPING=NO;
-				IPHONEOS_DEPLOYMENT_TARGET=14.0;
-				SDKROOT=iphoneos;
-			};
-			name=Release;
-		};
-		B053 /* Debug Target */ = {
-			isa=XCBuildConfiguration;
-			buildSettings={
-				CODE_SIGN_IDENTITY=""; CODE_SIGNING_ALLOWED=NO; CODE_SIGNING_REQUIRED=NO;
-				CODE_SIGN_ENTITLEMENTS=AccessiTools/entitlements.plist;
-				CURRENT_PROJECT_VERSION=2;
-				INFOPLIST_FILE=AccessiTools/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS="$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION=2.0;
-				PRODUCT_BUNDLE_IDENTIFIER=com.local.accessitools;
-				PRODUCT_NAME="$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS=iphoneos;
-				SUPPORTS_MACCATALYST=NO;
-				SWIFT_VERSION=5.0;
-				TARGETED_DEVICE_FAMILY=1;
-				OTHER_LDFLAGS=("-framework" "UIKit" "-framework" "Foundation");
-			};
-			name=Debug;
-		};
-		B054 /* Release Target */ = {
-			isa=XCBuildConfiguration;
-			buildSettings={
-				CODE_SIGN_IDENTITY=""; CODE_SIGNING_ALLOWED=NO; CODE_SIGNING_REQUIRED=NO;
-				CODE_SIGN_ENTITLEMENTS=AccessiTools/entitlements.plist;
-				CURRENT_PROJECT_VERSION=2;
-				INFOPLIST_FILE=AccessiTools/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS="$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION=2.0;
-				PRODUCT_BUNDLE_IDENTIFIER=com.local.accessitools;
-				PRODUCT_NAME="$(TARGET_NAME)";
-				SUPPORTED_PLATFORMS=iphoneos;
-				SUPPORTS_MACCATALYST=NO;
-				SWIFT_VERSION=5.0;
-				TARGETED_DEVICE_FAMILY=1;
-				OTHER_LDFLAGS=("-framework" "UIKit" "-framework" "Foundation");
-			};
-			name=Release;
-		};
+/* End PBXProject section */
 
-/* XCConfigurationList */
-		B050 = {isa=XCConfigurationList; buildConfigurations=(B053,B054); defaultConfigurationIsVisible=0; defaultConfigurationName=Release;};
-		B061 = {isa=XCConfigurationList; buildConfigurations=(B051,B052); defaultConfigurationIsVisible=0; defaultConfigurationName=Release;};
+/* Begin PBXResourcesBuildPhase section */
+		AA11BB22CC33DD44EE55FF32 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		AA11BB22CC33DD44EE55FF31 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AA11BB22CC33DD44EE55FF01 /* AppDelegate.swift in Sources */,
+				AA11BB22CC33DD44EE55FF02 /* MainViewController.swift in Sources */,
+				AA11BB22CC33DD44EE55FF03 /* FloatingKeyboardWindow.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		AA11BB22CC33DD44EE55FF51 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				DEAD_CODE_STRIPPING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		AA11BB22CC33DD44EE55FF52 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				DEAD_CODE_STRIPPING = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		AA11BB22CC33DD44EE55FF53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = AccessiTools/entitlements.plist;
+				CURRENT_PROJECT_VERSION = 2;
+				INFOPLIST_FILE = AccessiTools/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.accessitools;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				OTHER_LDFLAGS = (
+					"-framework",
+					UIKit,
+					"-framework",
+					Foundation,
+				);
+			};
+			name = Debug;
+		};
+		AA11BB22CC33DD44EE55FF54 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = AccessiTools/entitlements.plist;
+				CURRENT_PROJECT_VERSION = 2;
+				INFOPLIST_FILE = AccessiTools/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.local.accessitools;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+				OTHER_LDFLAGS = (
+					"-framework",
+					UIKit,
+					"-framework",
+					Foundation,
+				);
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		AA11BB22CC33DD44EE55FF60 /* Build configuration list for PBXNativeTarget "AccessiTools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA11BB22CC33DD44EE55FF53 /* Debug */,
+				AA11BB22CC33DD44EE55FF54 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AA11BB22CC33DD44EE55FF71 /* Build configuration list for PBXProject "AccessiTools" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AA11BB22CC33DD44EE55FF51 /* Debug */,
+				AA11BB22CC33DD44EE55FF52 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
 	};
-	rootObject = B060;
+	rootObject = AA11BB22CC33DD44EE55FF70 /* Project object */;
 }
