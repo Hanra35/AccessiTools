@@ -1,0 +1,28 @@
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Permet d'accéder aux APIs privées SpringBoard -->
+    <key>platform-application</key>
+    <true/>
+
+    <!-- Rotation système globale via SBSSetSystemForcedOrientationLock -->
+    <key>com.apple.private.springboard.rotation</key>
+    <true/>
+
+    <!-- Fenêtre au-dessus de toutes les autres apps -->
+    <key>com.apple.private.uikit.window-level</key>
+    <true/>
+
+    <!-- Reste actif en arrière-plan -->
+    <key>com.apple.backgroundtasks.permits</key>
+    <true/>
+
+    <!-- Pas de sandbox pour accès total -->
+    <key>com.apple.private.security.no-sandbox</key>
+    <true/>
+
+    <!-- Accès SpringBoardServices -->
+    <key>com.apple.springboard.services</key>
+    <true/>
+</dict>
+</plist>
